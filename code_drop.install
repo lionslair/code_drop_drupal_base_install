@@ -62,9 +62,88 @@ function code_drop_install() {
   $full_html_format = (object) $full_html_format;
   filter_format_save($full_html_format);
 
+  $wysiwyg_settings = array(
+    'default' => 1,
+    'user_choose' => 0,
+    'show_toggle' => 1,
+    'theme' => 'advanced',
+    'language' => 'en',
+    'buttons' =>
+      array(
+        'default' =>
+          array(
+            'bold' => 1,
+            'italic' => 1,
+            'underline' => 1,
+            'justifyleft' => 1,
+            'justifycenter' => 1,
+            'justifyright' => 1,
+            'justifyfull' => 1,
+            'bullist' => 1,
+            'numlist' => 1,
+            'link' => 1,
+            'unlink' => 1,
+            'anchor' => 1,
+            'image' => 1,
+            'formatselect' => 1,
+            'styleselect' => 1,
+            'blockquote' => 1,
+          ),
+        'advlink' =>
+          array(
+            'advlink' => 1,
+          ),
+        'paste' =>
+          array(
+            'pasteword' => 1,
+          ),
+        'style' =>
+          array(
+            'styleprops' => 1,
+          ),
+        'media' =>
+          array(
+            'media' => 1,
+          ),
+        'xhtmlxtras' =>
+          array(
+            'attribs' => 1,
+          ),
+        'advlist' =>
+          array(
+            'advlist' => 1,
+          ),
+        'wordcount' =>
+          array(
+            'wordcount' => 1,
+          ),
+        'imce' =>
+          array(
+            'imce' => 1,
+          ),
+      ),
+    'toolbar_loc' => 'top',
+    'toolbar_align' => 'left',
+    'path_loc' => 'bottom',
+    'resizing' => 1,
+    'verify_html' => 1,
+    'preformatted' => 0,
+    'convert_fonts_to_spans' => 1,
+    'remove_linebreaks' => 1,
+    'apply_source_formatting' => 1,
+    'paste_auto_cleanup_on_paste' => 1,
+    'block_formats' => 'p,address,pre,h2,h3,h4,h5,h6,div',
+    'css_setting' => 'theme',
+    'css_path' => '',
+    'css_classes' => '',
+  );
   db_insert('wysiwyg')
-  ->fields(array('format' => 'full_html', 'editor' => 'tinymce', 'settings' => 'a:20:{s:7:"default";i:1;s:11:"user_choose";i:0;s:11:"show_toggle";i:1;s:5:"theme";s:8:"advanced";s:8:"language";s:2:"en";s:7:"buttons";a:10:{s:7:"default";a:16:{s:4:"bold";i:1;s:6:"italic";i:1;s:9:"underline";i:1;s:11:"justifyleft";i:1;s:13:"justifycenter";i:1;s:12:"justifyright";i:1;s:11:"justifyfull";i:1;s:7:"bullist";i:1;s:7:"numlist";i:1;s:4:"link";i:1;s:6:"unlink";i:1;s:6:"anchor";i:1;s:5:"image";i:1;s:12:"formatselect";i:1;s:11:"styleselect";i:1;s:10:"blockquote";i:1;}s:7:"advlink";a:1:{s:7:"advlink";i:1;}s:5:"paste";a:1:{s:9:"pasteword";i:1;}s:5:"style";a:1:{s:10:"styleprops";i:1;}s:5:"table";a:1:{s:13:"tablecontrols";i:1;}s:5:"media";a:1:{s:5:"media";i:1;}s:10:"xhtmlxtras";a:1:{s:7:"attribs";i:1;}s:7:"advlist";a:1:{s:7:"advlist";i:1;}s:9:"wordcount";a:1:{s:9:"wordcount";i:1;}s:4:"imce";a:1:{s:4:"imce";i:1;}}s:11:"toolbar_loc";s:3:"top";s:13:"toolbar_align";s:4:"left";s:8:"path_loc";s:6:"bottom";s:8:"resizing";i:1;s:11:"verify_html";i:1;s:12:"preformatted";i:0;s:22:"convert_fonts_to_spans";i:1;s:17:"remove_linebreaks";i:1;s:23:"apply_source_formatting";i:1;s:27:"paste_auto_cleanup_on_paste";i:1;s:13:"block_formats";s:32:"p,address,pre,h2,h3,h4,h5,h6,div";s:11:"css_setting";s:5:"theme";s:8:"css_path";s:0:"";s:11:"css_classes";s:0:"";}'))
-  ->execute();
+    ->fields(array(
+      'format' => 'full_html',
+      'editor' => 'tinymce',
+      'settings' => serialize($wysiwyg_settings)
+    ))
+    ->execute();
 
   // Enable some code_drop blocks.
   $default_theme = 'bartik';
@@ -89,7 +168,7 @@ function code_drop_install() {
   variable_set('admin_theme', $admin_theme);
   // activate admin theme when editing a node
   variable_set('node_admin_theme', '1');
-  
+
   // Insert default pre-defined node types into the database. For a complete
   // list of available node type attributes, refer to the node type API
   // documentation at: http://api.drupal.org/api/HEAD/function/hook_node_info.
@@ -200,7 +279,6 @@ function code_drop_install() {
     'bundle' => 'article',
     'description' => st('Upload an image to go with this article.'),
     'required' => FALSE,
-
     'settings' => array(
       'file_directory' => 'field/image',
       'file_extensions' => 'png gif jpg jpeg',
@@ -210,7 +288,6 @@ function code_drop_install() {
       'alt_field' => TRUE,
       'title_field' => '',
     ),
-
     'widget' => array(
       'type' => 'image_image',
       'settings' => array(
@@ -219,7 +296,6 @@ function code_drop_install() {
       ),
       'weight' => -1,
     ),
-
     'display' => array(
       'default' => array(
         'label' => 'hidden',
@@ -230,7 +306,10 @@ function code_drop_install() {
       'teaser' => array(
         'label' => 'hidden',
         'type' => 'image',
-        'settings' => array('image_style' => 'medium', 'image_link' => 'content'),
+        'settings' => array(
+          'image_style' => 'medium',
+          'image_link' => 'content'
+        ),
         'weight' => -1,
       ),
     ),
@@ -253,7 +332,7 @@ function code_drop_install() {
       'weight' => -17,
     ),
   );
-  shortcut_set_save($shortcut_set);// Create a default role for site administrators, with all available permissions assigned.
+  shortcut_set_save($shortcut_set); // Create a default role for site administrators, with all available permissions assigned.
   $admin_role = new stdClass();
   $admin_role->name = 'developer';
   $admin_role->weight = 10;
@@ -272,28 +351,28 @@ function code_drop_install() {
   $content_admin_role->name = 'content admin';
   $content_admin_role->weight = 10;
   user_role_save($content_admin_role);
-  $roles = array( 
-    'administer blocks', 
-    'administer comments', 
-    'access contextual links', 
-    'use text format full_html', 
-    'administer menu', 
-    'bypass node access', 
-    'administer nodes', 
-    'access content overview', 
-    'search content', 
-    'access administration pages', 
-    'view the administration theme', 
-    'administer taxonomy', 
-    'access toolbar', 
-    'administer permissions', 
-    'access all webform results', 
-    'access own webform results', 
-    'edit all webform submissions', 
-    'delete all webform submissions', 
-    'access own webform submissions', 
-    'edit own webform submissions', 
-    'delete own webform submissions', 
+  $roles = array(
+    'administer blocks',
+    'administer comments',
+    'access contextual links',
+    'use text format full_html',
+    'administer menu',
+    'bypass node access',
+    'administer nodes',
+    'access content overview',
+    'search content',
+    'access administration pages',
+    'view the administration theme',
+    'administer taxonomy',
+    'access toolbar',
+    'administer permissions',
+    'access all webform results',
+    'access own webform results',
+    'edit all webform submissions',
+    'delete all webform submissions',
+    'access own webform submissions',
+    'edit own webform submissions',
+    'delete own webform submissions',
   );
   user_role_grant_permissions($content_admin_role->rid, $roles);
 
