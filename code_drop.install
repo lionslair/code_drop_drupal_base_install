@@ -384,4 +384,16 @@ function code_drop_install() {
   node_access_needs_rebuild(FALSE);
   // ignore any other install messages
   drupal_get_messages();
+
+  // Install variables.
+  _code_drop_install_variables();
+}
+
+/**
+ * Set any default variables. For some reason they don't always work
+ * from the info file.
+ */
+function _code_drop_install_variables() {
+  variable_set('comment_page', 1);
+  variable_set('module_filter_use_switch', 0);
 }
