@@ -378,6 +378,11 @@ function code_drop_install() {
   user_role_grant_permissions(DRUPAL_ANONYMOUS_RID, array('access content'));
   user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, array('access content'));
 
+  // Give the content admin role the IMCE permissions for the User-1 profile.
+  $imce_roles = variable_get('imce_roles_profiles', array());
+  $imce_roles[$content_admin_role->rid]['public_pid'] = 1;
+  variable_set('imce_roles_profiles', $imce_roles);
+
   // Update the menu router information.
   menu_rebuild();
   // ignore any rebuild messages
