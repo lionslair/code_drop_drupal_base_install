@@ -20,7 +20,7 @@ projects[] = webform
 ; Themes
 projects[] = shiny
 
-projects[zenjy][type] = module
+projects[zenjy][type] = theme
 projects[zenjy][download][type] = git
 projects[zenjy][download][branch] = "7.x-5.x"
 projects[zenjy][download][url] = http://git.drupal.org/sandbox/sam/2288921.git
