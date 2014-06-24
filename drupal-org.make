@@ -1,6 +1,6 @@
 ; code_drop make file for d.o. usage
-core = "7.x"
-api = "2"
+core = 7.x
+api = 2
 
 ; Modules
 projects[] = ctools
@@ -18,8 +18,13 @@ projects[] = imce_wysiwyg
 projects[] = webform
 
 ; Themes
-projects[] = zen
 projects[] = shiny
+
+projects[zenjy][type] = module
+projects[zenjy][download][type] = git
+projects[zenjy][download][branch] = "7.x-5.x"
+projects[zenjy][download][url] = http://git.drupal.org/sandbox/sam/2288921.git
+projects[zenjy][download][revision] = dbc776f9dd8f5bcef4ba459f6dfdf6de701dcf5d
 
 ; tinymce
 libraries[tinymce][directory_name] = "tinymce"
