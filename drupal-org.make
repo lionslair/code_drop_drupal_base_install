@@ -24,7 +24,7 @@ projects[zenjy][type] = theme
 projects[zenjy][download][type] = git
 projects[zenjy][download][branch] = "7.x-5.x"
 projects[zenjy][download][url] = http://git.drupal.org/sandbox/sam/2288921.git
-projects[zenjy][download][revision] = dbc776f9dd8f5bcef4ba459f6dfdf6de701dcf5d
+projects[zenjy][download][revision] = 38873a0015d863ba9a52992beb821714d073f8ca
 
 ; tinymce
 libraries[tinymce][directory_name] = "tinymce"
