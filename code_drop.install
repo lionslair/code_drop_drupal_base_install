@@ -117,6 +117,10 @@ function code_drop_install() {
           array(
             'wordcount' => 1,
           ),
+        'autoresize' =>
+          array(
+            'autoresize' => 1,
+          ),
         'imce' =>
           array(
             'imce' => 1,
