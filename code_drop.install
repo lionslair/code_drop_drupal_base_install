@@ -1,411 +1,60 @@
 <?php
 /**
+ * @file
+ * Install, update and uninstall functions for the standard installation profile.
+ */
+
+use Drupal\comment\Plugin\Field\FieldType\CommentItemInterface;
+
+/**
  * Implements hook_install().
- *
- * Perform actions to set up the site for this profile.
  */
 function code_drop_install() {
+  // Set front page to "node".
+  \Drupal::config('system.site')->set('page.front', 'node')->save();
 
-// Add text formats.
-  $filtered_html_format = array(
-    'format' => 'filtered_html',
-    'name' => 'Filtered HTML',
-    'weight' => 1,
-    'filters' => array(
-      // URL filter.
-      'filter_url' => array(
-        'weight' => 0,
-        'status' => 1,
-      ),
-      // HTML filter.
-      'filter_html' => array(
-        'weight' => 1,
-        'status' => 1,
-      ),
-      // Line break filter.
-      'filter_autop' => array(
-        'weight' => 2,
-        'status' => 1,
-      ),
-      // HTML corrector filter.
-      'filter_htmlcorrector' => array(
-        'weight' => 10,
-        'status' => 1,
-      ),
-    ),
-  );
-  $filtered_html_format = (object) $filtered_html_format;
-  filter_format_save($filtered_html_format);
+  // Account creation by admin only..
+  $user_settings = \Drupal::config('user.settings');
+  $user_settings->set('register', USER_REGISTER_ADMINISTRATORS_ONLY)->save();
 
-  $full_html_format = array(
-    'format' => 'full_html',
-    'name' => 'Full HTML',
-    'weight' => 0,
-    'filters' => array(
-      // URL filter.
-      'filter_url' => array(
-        'weight' => 0,
-        'status' => 1,
-      ),
-      // Line break filter.
-      'filter_autop' => array(
-        'weight' => 1,
-        'status' => 1,
-      ),
-      // HTML corrector filter.
-      'filter_htmlcorrector' => array(
-        'weight' => 10,
-        'status' => 1,
-      ),
-    ),
-  );
-  $full_html_format = (object) $full_html_format;
-  filter_format_save($full_html_format);
-
-  $wysiwyg_settings = array(
-    'default' => 1,
-    'user_choose' => 0,
-    'show_toggle' => 1,
-    'theme' => 'advanced',
-    'language' => 'en',
-    'buttons' =>
-      array(
-        'default' =>
-          array(
-            'bold' => 1,
-            'italic' => 1,
-            'underline' => 1,
-            'justifyleft' => 1,
-            'justifycenter' => 1,
-            'justifyright' => 1,
-            'justifyfull' => 1,
-            'bullist' => 1,
-            'numlist' => 1,
-            'link' => 1,
-            'unlink' => 1,
-            'anchor' => 1,
-            'image' => 1,
-            'formatselect' => 1,
-            'styleselect' => 1,
-            'blockquote' => 1,
-          ),
-        'advlink' =>
-          array(
-            'advlink' => 1,
-          ),
-        'paste' =>
-          array(
-            'pasteword' => 1,
-          ),
-        'style' =>
-          array(
-            'styleprops' => 1,
-          ),
-        'media' =>
-          array(
-            'media' => 1,
-          ),
-        'xhtmlxtras' =>
-          array(
-            'attribs' => 1,
-          ),
-        'advlist' =>
-          array(
-            'advlist' => 1,
-          ),
-        'wordcount' =>
-          array(
-            'wordcount' => 1,
-          ),
-        'autoresize' =>
-          array(
-            'autoresize' => 1,
-          ),
-        'imce' =>
-          array(
-            'imce' => 1,
-          ),
-      ),
-    'toolbar_loc' => 'top',
-    'toolbar_align' => 'left',
-    'path_loc' => 'bottom',
-    'resizing' => 1,
-    'verify_html' => 1,
-    'preformatted' => 0,
-    'convert_fonts_to_spans' => 1,
-    'remove_linebreaks' => 1,
-    'apply_source_formatting' => 1,
-    'paste_auto_cleanup_on_paste' => 1,
-    'block_formats' => 'p,address,pre,h2,h3,h4,h5,h6,div',
-    'css_setting' => 'theme',
-    'css_path' => '',
-    'css_classes' => '',
-  );
-  db_insert('wysiwyg')
-    ->fields(array(
-      'format' => 'full_html',
-      'editor' => 'tinymce',
-      'settings' => serialize($wysiwyg_settings)
-    ))
-    ->execute();
-
-  // Enable some code_drop blocks.
-  $default_theme = 'bartik';
-  $admin_theme = 'shiny';
-  // disable all themes
-  db_update('system')
-    ->fields(array('status' => 0))
-    ->condition('type', 'theme')
-    ->execute();
-  // enable $default_theme
-  db_update('system')
-    ->fields(array('status' => 1))
-    ->condition('type', 'theme')
-    ->condition('name', $default_theme)
-    ->execute();
-  // enable $admin_theme
-  db_update('system')
-    ->fields(array('status' => 1))
-    ->condition('type', 'theme')
-    ->condition('name', $admin_theme)
-    ->execute();
-  variable_set('admin_theme', $admin_theme);
-  // activate admin theme when editing a node
-  variable_set('node_admin_theme', '1');
-
-  // Insert default pre-defined node types into the database. For a complete
-  // list of available node type attributes, refer to the node type API
-  // documentation at: http://api.drupal.org/api/HEAD/function/hook_node_info.
-  $types = array(
-    array(
-      'type' => 'page',
-      'name' => st('Basic Page'),
-      'base' => 'node_content',
-      'description' => st("Use <em>pages</em> for basic page content."),
-      'custom' => 1,
-      'modified' => 1,
-      'locked' => 0,
-    ),
-  );
-
-  foreach ($types as $type) {
-    $type = node_type_set_defaults($type);
-    node_type_save($type);
-    node_add_body_field($type);
-  }
-
-
-  // Default "Page" to not be promoted and have comments disabled.
-  variable_set('node_options_page', array('status'));
-
-  // Don't display date and author information for "Page" nodes by default.
-  variable_set('node_submitted_page', FALSE);
-
-  // Create a default vocabulary named "Tags", enabled for the 'article' content type.
-  $description = st('Use tags to group articles on similar topics into categories.');
-  $help = st('Enter a comma-separated list of words to describe your content.');
-  $vocabulary = (object) array(
-    'name' => st('Tags'),
-    'description' => $description,
-    'machine_name' => 'tags',
-    'help' => $help,
-
-  );
-  taxonomy_vocabulary_save($vocabulary);
-
-  $field = array(
-    'field_name' => 'field_' . $vocabulary->machine_name,
-    'type' => 'taxonomy_term_reference',
-    // Set cardinality to unlimited for tagging.
-    'cardinality' => FIELD_CARDINALITY_UNLIMITED,
-    'settings' => array(
-      'allowed_values' => array(
-        array(
-          'vocabulary' => $vocabulary->machine_name,
-          'parent' => 0,
-        ),
-      ),
-    ),
-  );
-  field_create_field($field);
-
-  $instance = array(
-    'field_name' => 'field_' . $vocabulary->machine_name,
-    'entity_type' => 'node',
-    'label' => 'Tags',
-    'bundle' => 'article',
-    'description' => $vocabulary->help,
-    'widget' => array(
-      'type' => 'taxonomy_autocomplete',
-      'weight' => -4,
-    ),
-    'display' => array(
-      'default' => array(
-        'type' => 'taxonomy_term_reference_link',
-        'weight' => 10,
-      ),
-      'teaser' => array(
-        'type' => 'taxonomy_term_reference_link',
-        'weight' => 10,
-      ),
-    ),
-  );
-  field_create_instance($instance);
-
-
-  // Create an image field named "Image", enabled for the 'article' content type.
-  // Many of the following values will be defaulted, they're included here as an illustrative examples.
-  // See http://api.drupal.org/api/function/field_create_field/7
-
-  $field = array(
-    'field_name' => 'field_image',
-    'type' => 'image',
-    'cardinality' => 1,
-    'locked' => FALSE,
-    'indexes' => array('fid' => array('fid')),
-    'settings' => array(
-      'uri_scheme' => 'public',
-      'default_image' => FALSE,
-    ),
-    'storage' => array(
-      'type' => 'field_sql_storage',
-      'settings' => array(),
-    ),
-  );
-  field_create_field($field);
-
-  // Many of the following values will be defaulted, they're included here as an illustrative examples.
-  // See http://api.drupal.org/api/function/field_create_instance/7
-  $instance = array(
-    'field_name' => 'field_image',
-    'entity_type' => 'node',
-    'label' => 'Image',
-    'bundle' => 'article',
-    'description' => st('Upload an image to go with this article.'),
-    'required' => FALSE,
-    'settings' => array(
-      'file_directory' => 'field/image',
-      'file_extensions' => 'png gif jpg jpeg',
-      'max_filesize' => '',
-      'max_resolution' => '',
-      'min_resolution' => '',
-      'alt_field' => TRUE,
-      'title_field' => '',
-    ),
-    'widget' => array(
-      'type' => 'image_image',
-      'settings' => array(
-        'progress_indicator' => 'throbber',
-        'preview_image_style' => 'thumbnail',
-      ),
-      'weight' => -1,
-    ),
-    'display' => array(
-      'default' => array(
-        'label' => 'hidden',
-        'type' => 'image',
-        'settings' => array('image_style' => 'large', 'image_link' => ''),
-        'weight' => -1,
-      ),
-      'teaser' => array(
-        'label' => 'hidden',
-        'type' => 'image',
-        'settings' => array(
-          'image_style' => 'medium',
-          'image_link' => 'content'
-        ),
-        'weight' => -1,
-      ),
-    ),
-  );
-  field_create_instance($instance);
-  // Create a Home link in the main menu.
-  $item = array(
-    'link_title' => st('Home'),
-    'link_path' => '<front>',
-    'menu_name' => 'main-menu',
-  );
-  menu_link_save($item);
-  // From shortcut.install, add shortcuts to the default set on install
-  $shortcut_set = shortcut_set_load(SHORTCUT_DEFAULT_SET_NAME);
-  $shortcut_set->links = NULL;
-  $shortcut_set->links = array(
-    array(
-      'link_path' => 'admin/appearance/settings',
-      'link_title' => st('Theme'),
-      'weight' => -17,
-    ),
-  );
-  shortcut_set_save($shortcut_set); // Create a default role for site administrators, with all available permissions assigned.
-  $admin_role = new stdClass();
-  $admin_role->name = 'developer';
-  $admin_role->weight = 10;
-  user_role_save($admin_role);
-  user_role_grant_permissions($admin_role->rid, array_keys(module_invoke_all('permission')));
+  // Enable all permissions for the administrator role.
+  user_role_grant_permissions('administrator', array_keys(\Drupal::moduleHandler()->invokeAll('permission')));
   // Set this as the administrator role.
-  variable_set('user_admin_role', $admin_role->rid);
+  $user_settings->set('admin_role', 'administrator')->save();
 
   // Assign user 1 the "administrator" role.
   db_insert('users_roles')
-    ->fields(array('uid' => 1, 'rid' => $admin_role->rid))
+    ->fields(array('uid' => 1, 'rid' => 'administrator'))
     ->execute();
 
-  // Content admin role.
-  $content_admin_role = new stdClass();
-  $content_admin_role->name = 'content admin';
-  $content_admin_role->weight = 10;
-  user_role_save($content_admin_role);
-  $roles = array(
-    'administer blocks',
-    'administer comments',
-    'access contextual links',
-    'use text format full_html',
-    'administer menu',
-    'bypass node access',
-    'administer nodes',
-    'access content overview',
-    'search content',
-    'access administration pages',
-    'view the administration theme',
-    'administer taxonomy',
-    'access toolbar',
-    'administer permissions',
-    'access all webform results',
-    'access own webform results',
-    'edit all webform submissions',
-    'delete all webform submissions',
-    'access own webform submissions',
-    'edit own webform submissions',
-    'delete own webform submissions',
-  );
-  user_role_grant_permissions($content_admin_role->rid, $roles);
-  user_role_grant_permissions(DRUPAL_ANONYMOUS_RID, array('access content'));
-  user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, array('access content'));
 
-  // Give the content admin role the IMCE permissions for the User-1 profile.
-  $imce_roles = variable_get('imce_roles_profiles', array());
-  $imce_roles[$content_admin_role->rid]['public_pid'] = 1;
-  variable_set('imce_roles_profiles', $imce_roles);
+  // Allow authenticated users to use shortcuts.
+  user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, array('access shortcuts'));
 
-  // Update the menu router information.
-  menu_rebuild();
-  // ignore any rebuild messages
-  node_access_needs_rebuild(FALSE);
-  // ignore any other install messages
-  drupal_get_messages();
+  // Populate the default shortcut set.
+  $shortcut = entity_create('shortcut', array(
+    'shortcut_set' => 'default',
+    'title' => t('Add content'),
+    'weight' => -20,
+    'path' => 'node/add',
+  ));
+  $shortcut->save();
 
-  // Install variables.
-  _code_drop_install_variables();
-}
+  $shortcut = entity_create('shortcut', array(
+    'shortcut_set' => 'default',
+    'title' => t('All content'),
+    'weight' => -19,
+    'path' => 'admin/content',
+  ));
+  $shortcut->save();
 
-/**
- * Set any default variables. For some reason they don't always work
- * from the info file.
- */
-function _code_drop_install_variables() {
-  variable_set('comment_page', 1);
-  variable_set('module_filter_use_switch', 0);
+  // Enable the admin theme.
+  \Drupal::config('node.settings')->set('use_admin_theme', '1')->save();
 
-  // Accounts must be created by admins as a default.
-  variable_set('user_register', USER_REGISTER_ADMINISTRATORS_ONLY);
+  // @todo Remove in https://www.drupal.org/node/2295129.
+  // Resave the plain_text formatter so that default filter plugins and
+  // dependencies are calculated correctly. This resolves an issue caused by the
+  // fact that filter is installed before editor but the standard profile also
+  // enables the file module.
+  entity_load('filter_format', 'plain_text')->save();
 }

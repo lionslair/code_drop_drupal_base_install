@@ -1,0 +1,35 @@
+name: Code Drop
+type: profile
+description: 'Code Drop install profile.'
+version: VERSION
+core: 8.x
+dependencies:
+  - node
+  - block
+  - breakpoint
+  - ckeditor
+  - color
+  - config
+  - contextual
+  - datetime
+  - block_content
+  - quickedit
+  - editor
+  - entity_reference
+  - image
+  - menu_ui
+  - options
+  - path
+  - taxonomy
+  - dblog
+  - search
+  - shortcut
+  - toolbar
+  - field_ui
+  - file
+  - views
+  - views_ui
+  - tour
+themes:
+  - bartik
+  - seven
