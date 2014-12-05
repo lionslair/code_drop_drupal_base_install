@@ -1,0 +1,7 @@
+name = CD Toolbar
+description = Creates a dropdown admin shortcuts list.
+core = 7.x
+package = Code Drop
+
+dependencies[] = toolbar
+dependencies[] = menu_block

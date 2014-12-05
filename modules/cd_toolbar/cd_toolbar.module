@@ -1,0 +1,73 @@
+<?php
+
+/**
+ * @file
+ * Toolbar module.
+ */
+
+/**
+ * Implements hook_page_alter().
+ */
+function cd_toolbar_page_alter(&$page) {
+  if (isset($page['page_top']['toolbar'])) {
+    // If the toolbar is available, add a pre-render function.
+    $page['page_top']['toolbar']['#pre_render'][] = 'cd_toolbar_pre_render';
+  }
+}
+
+/**
+ * Add our custom css to the toolbar.
+ *
+ * @param array $toolbar
+ *   The toolbar info.
+ */
+function cd_toolbar_pre_render($toolbar) {
+  $module_path = drupal_get_path('module', 'cd_toolbar');
+  $toolbar['#attached']['css'][] = $module_path . '/css/new-toolbar.css';
+
+  return $toolbar;
+}
+
+/**
+ * Implements hook_menu().
+ */
+function cd_toolbar_menu() {
+  $items = array();
+  $items['admin/config/user-interface/cd-toolbar'] = array(
+    'title' => 'CD Toolbar',
+    'description' => 'Configure the cd toolbar.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('cd_toolbar_admin_settings_form'),
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'cd_toolbar.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_theme_registry_alter().
+ */
+function cd_toolbar_theme_registry_alter(&$theme_registry) {
+
+  // Take over responsibility for the admin toolbar.
+  $module_path = drupal_get_path('module', 'cd_toolbar');
+  $theme_registry['toolbar']['path'] = $module_path . '/theme';
+}
+
+/**
+ * Implements hook_permission().
+ */
+function cd_toolbar_permission() {
+  return array(
+    'cd access admin toolbar' => array(
+      'title' => t('Access Core Admin Toolbar'),
+      'description' => t('Access Core Admin Toolbar.'),
+    ),
+    'cd access toolbar' => array(
+      'title' => t('Access Toolbar'),
+      'description' => t('Access Menu Block Toolbar'),
+    ),
+  );
+}
