@@ -367,6 +367,7 @@ function code_drop_install() {
     'search content',
     'access administration pages',
     'view the administration theme',
+    'access overlay',
     'administer taxonomy',
     'access toolbar',
     'administer permissions',

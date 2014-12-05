@@ -17,6 +17,14 @@ function cd_toolbar_install() {
   menu_save($menu);
 
   $item = array(
+    'link_title' => '⌂',
+    'link_path' => '<front>',
+    'menu_name' => 'toolbar-menu',
+    'weight' => -10,
+  );
+  menu_link_save($item);
+
+  $item = array(
     'link_title' => 'Add Content',
     'link_path' => 'node/add',
     'menu_name' => 'toolbar-menu',
