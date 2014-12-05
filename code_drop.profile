@@ -22,3 +22,24 @@ if (!function_exists("system_form_install_select_profile_form_alter")) {
     }
   }
 }
+
+/**
+ * Implements hook_menu_block_blocks().
+ */
+function code_drop_menu_block_blocks() {
+  return array(
+    // The array key is the block id used by menu block.
+    'admin-toolbar' => array(
+      // Use the array keys/values described in menu_tree_build().
+      'menu_name' => 'toolbar-menu',
+      'parent_mlid' => 0,
+      'title_link' => FALSE,
+      'admin_title' => 'Toolbar Menu',
+      'level' => 1,
+      'follow' => 0,
+      'depth' => 2,
+      'expanded' => TRUE,
+      'sort' => FALSE,
+    ),
+  );
+}

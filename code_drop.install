@@ -377,6 +377,7 @@ function code_drop_install() {
     'access own webform submissions',
     'edit own webform submissions',
     'delete own webform submissions',
+    'cd access toolbar',
   );
   user_role_grant_permissions($content_admin_role->rid, $roles);
   user_role_grant_permissions(DRUPAL_ANONYMOUS_RID, array('access content'));
@@ -396,6 +397,8 @@ function code_drop_install() {
 
   // Install variables.
   _code_drop_install_variables();
+
+  variable_set('cd_toolbar_selected_menu', 'admin-toolbar');
 }
 
 /**

@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * @file
+ * Install required components for the menu.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function cd_toolbar_install() {
+  $menu = array(
+    'menu_name' => 'toolbar-menu',
+    'title' => 'Content Admin Toolbar',
+    'description' => 'The toolbar for content admins.',
+  );
+  menu_save($menu);
+
+  $item = array(
+    'link_title' => 'Add Content',
+    'link_path' => 'node/add',
+    'menu_name' => 'toolbar-menu',
+  );
+  menu_link_save($item);
+
+  $item = array(
+    'link_title' => 'Find Content',
+    'link_path' => 'admin/content',
+    'menu_name' => 'toolbar-menu',
+  );
+  menu_link_save($item);
+}

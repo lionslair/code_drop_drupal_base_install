@@ -56,6 +56,8 @@ dependencies[] = views
 dependencies[] = views_ui
 ; Webform
 dependencies[] = webform
+; Custom
+dependencies[] = cd_toolbar
 
 ; ----------
 ; Variables
