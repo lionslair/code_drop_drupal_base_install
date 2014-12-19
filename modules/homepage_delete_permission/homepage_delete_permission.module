@@ -35,7 +35,7 @@ function homepage_delete_permission_form_alter(&$form, &$form_state, $form_id) {
 function homepage_delete_permission_get_front_id() {
   $front = explode('/', variable_get('site_frontpage', 'node'));
 
-  return $front[1];
+  return isset($front[1]) ? $front[1] : NULL;
 }
 
 /**
