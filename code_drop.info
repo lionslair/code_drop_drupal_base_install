@@ -50,7 +50,6 @@ dependencies[] = menu_block
 dependencies[] = pathauto
 dependencies[] = token
 ; User interface
-dependencies[] = imce_wysiwyg
 dependencies[] = wysiwyg
 ; Views
 dependencies[] = views
