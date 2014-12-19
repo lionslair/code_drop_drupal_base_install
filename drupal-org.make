@@ -13,9 +13,8 @@ projects[] = pathauto
 projects[] = token
 projects[] = views
 projects[] = wysiwyg
-projects[] = imce
-projects[] = imce_wysiwyg
 projects[] = webform
+projects[] = media
 
 ; Themes
 projects[] = shiny

@@ -4,7 +4,8 @@
  *
  * Perform actions to set up the site for this profile.
  */
-function code_drop_install() {
+function code_drop_install()
+{
 
 // Add text formats.
   $filtered_html_format = array(
@@ -34,7 +35,7 @@ function code_drop_install() {
       ),
     ),
   );
-  $filtered_html_format = (object) $filtered_html_format;
+  $filtered_html_format = (object)$filtered_html_format;
   filter_format_save($filtered_html_format);
 
   $full_html_format = array(
@@ -59,7 +60,7 @@ function code_drop_install() {
       ),
     ),
   );
-  $full_html_format = (object) $full_html_format;
+  $full_html_format = (object)$full_html_format;
   filter_format_save($full_html_format);
 
   $wysiwyg_settings = array(
@@ -121,10 +122,7 @@ function code_drop_install() {
           array(
             'autoresize' => 1,
           ),
-        'imce' =>
-          array(
-            'imce' => 1,
-          ),
+        'drupal' => ['media' => 1],
       ),
     'toolbar_loc' => 'top',
     'toolbar_align' => 'left',
@@ -204,7 +202,7 @@ function code_drop_install() {
   // Create a default vocabulary named "Tags", enabled for the 'article' content type.
   $description = st('Use tags to group articles on similar topics into categories.');
   $help = st('Enter a comma-separated list of words to describe your content.');
-  $vocabulary = (object) array(
+  $vocabulary = (object)array(
     'name' => st('Tags'),
     'description' => $description,
     'machine_name' => 'tags',
@@ -379,15 +377,11 @@ function code_drop_install() {
     'edit own webform submissions',
     'delete own webform submissions',
     'cd access toolbar',
+    'edit media',
   );
   user_role_grant_permissions($content_admin_role->rid, $roles);
   user_role_grant_permissions(DRUPAL_ANONYMOUS_RID, array('access content'));
   user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, array('access content'));
-
-  // Give the content admin role the IMCE permissions for the User-1 profile.
-  $imce_roles = variable_get('imce_roles_profiles', array());
-  $imce_roles[$content_admin_role->rid]['public_pid'] = 1;
-  variable_set('imce_roles_profiles', $imce_roles);
 
   // Update the menu router information.
   menu_rebuild();
@@ -406,7 +400,8 @@ function code_drop_install() {
  * Set any default variables. For some reason they don't always work
  * from the info file.
  */
-function _code_drop_install_variables() {
+function _code_drop_install_variables()
+{
   variable_set('comment_page', 1);
   variable_set('module_filter_use_switch', 0);
 

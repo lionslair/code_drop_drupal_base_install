@@ -1,0 +1,4 @@
+name = Homepage Delete Permission
+description = Adds a user permission for deleting the homepage node.
+core = 7.x
+package = "Code Drop"
