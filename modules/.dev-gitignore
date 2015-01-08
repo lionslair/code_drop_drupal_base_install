@@ -1,0 +1,16 @@
+# Ignore things which the make file provides.
+/libraries
+/ctools
+/devel
+/entity
+/imce
+/imce_wysiwyg
+/libraries
+/menu_block
+/module_filter
+/pathauto
+/token
+/views
+/webform
+/wysiwyg
+/themes
