@@ -13,7 +13,6 @@ dependencies[] = ctools
 ; Core
 dependencies[] = block
 dependencies[] = color
-dependencies[] = comment
 dependencies[] = contextual
 dependencies[] = dashboard
 dependencies[] = dblog
@@ -91,4 +90,3 @@ variables[user_picture_dimensions] = '1024x1024'
 variables[user_picture_file_size] = '800'
 variables[user_picture_style] = 'thumbnail'
 variables[user_register] = 2
-
