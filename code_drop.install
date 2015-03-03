@@ -404,6 +404,7 @@ function _code_drop_install_variables()
 {
   variable_set('comment_page', 1);
   variable_set('module_filter_use_switch', 0);
+  variable_set('pathauto_update_action', 0);
 
   // Accounts must be created by admins as a default.
   variable_set('user_register', USER_REGISTER_ADMINISTRATORS_ONLY);
