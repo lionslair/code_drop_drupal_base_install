@@ -57,7 +57,7 @@ dependencies[] = views_ui
 dependencies[] = webform
 ; Custom
 dependencies[] = cd_toolbar
-dependencies[] = delete_homepage_permission
+dependencies[] = homepage_delete_permission
 
 ; ----------
 ; Variables
@@ -76,7 +76,6 @@ variables[module_filter_use_url_fragment] = 1
 variables[module_filter_visual_aid] = 1
 variables[module_filter_use_switch] = 0
 variables[node_admin_theme] = 1
-variables[comment_page] = 1
 variables[node_options_page][0] = 'status'
 variables[pathauto_blog_pattern] = 'blogs/[user:name]'
 variables[pathauto_forum_pattern] = '[term:vocabulary]/[term:name]'
