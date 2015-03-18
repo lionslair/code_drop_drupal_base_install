@@ -355,7 +355,6 @@ function code_drop_install()
   user_role_save($content_admin_role);
   $roles = array(
     'administer blocks',
-    'administer comments',
     'access contextual links',
     'use text format full_html',
     'administer menu',
@@ -400,9 +399,7 @@ function code_drop_install()
  * Set any default variables. For some reason they don't always work
  * from the info file.
  */
-function _code_drop_install_variables()
-{
-  variable_set('comment_page', 1);
+function _code_drop_install_variables() {
   variable_set('module_filter_use_switch', 0);
 
   // Accounts must be created by admins as a default.
