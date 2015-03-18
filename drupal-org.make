@@ -15,6 +15,7 @@ projects[] = views
 projects[] = wysiwyg
 projects[] = webform
 projects[] = media
+projects[] = delete_homepage_permission
 
 ; Themes
 projects[] = shiny

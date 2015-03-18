@@ -48,6 +48,7 @@ dependencies[] = libraries
 dependencies[] = menu_block
 dependencies[] = pathauto
 dependencies[] = token
+dependencies[] = delete_homepage_permission
 ; User interface
 dependencies[] = wysiwyg
 ; Views
@@ -57,7 +58,6 @@ dependencies[] = views_ui
 dependencies[] = webform
 ; Custom
 dependencies[] = cd_toolbar
-dependencies[] = delete_homepage_permission
 
 ; ----------
 ; Variables
