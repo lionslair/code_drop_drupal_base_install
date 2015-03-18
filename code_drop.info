@@ -57,7 +57,7 @@ dependencies[] = views_ui
 dependencies[] = webform
 ; Custom
 dependencies[] = cd_toolbar
-;dependencies[] = delete_homepage_permission
+dependencies[] = delete_homepage_permission
 
 ; ----------
 ; Variables
