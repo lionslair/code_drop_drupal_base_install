@@ -14,7 +14,7 @@ projects[] = token
 projects[] = views
 projects[] = wysiwyg
 projects[] = webform
-projects[] = media
+projects[] = media-7.x-2.0-alpha4
 projects[] = delete_homepage_permission
 
 ; Themes
