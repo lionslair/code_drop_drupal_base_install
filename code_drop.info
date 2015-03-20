@@ -41,6 +41,7 @@ dependencies[] = update
 dependencies[] = user
 dependencies[] = user
 ; Media
+dependencies[] = file_entity
 dependencies[] = media
 ; Other
 dependencies[] = entity
