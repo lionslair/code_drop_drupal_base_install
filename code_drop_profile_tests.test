@@ -1,0 +1,63 @@
+<?php
+
+/**
+ * @file
+ * Test the Code Drop profile on deployment.
+ */
+class code_drop_webform_emails extends DrupalWebTestCase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function getInfo() {
+    return [
+      'name' => t('Code Drop Profile Tests'),
+      'description' => t('Test the Code Drop profile on deployment.'),
+      'group' => 'Code Drop Profile',
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    $this->originalFileDirectory = "sites/default/files";
+    $this->setup = TRUE;
+    $this->public_files_directory = $this->originalFileDirectory . '/simpletest/' . substr($this->databasePrefix, 10);
+    file_prepare_directory($this->public_files_directory, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function tearDown() {
+  }
+
+  /**
+   * Check all webforms have emails.
+   */
+  public function testWebformEmails() {
+    if (!module_exists('webform')) {
+      return;
+    }
+    foreach (webform_variable_get('webform_node_types') as $node_type) {
+      foreach ($this->loadAllNodesOfType($node_type) as $node) {
+        $this->assertTrue(count($node->webform['emails']) > 0, t('The webform "@form_name" had an email attached to it.', array('@form_name' => $node->title)));
+      }
+    }
+  }
+
+  /**
+   * Load all nodes of a particular type.
+   *
+   * @param string $type
+   *   The content type to load all nodes for.
+   *
+   * @return array
+   *   An array of loaded nodes.
+   */
+  protected function loadAllNodesOfType($type) {
+    $nodes = node_load_multiple(array(), array('type' => $type));
+    return array_values($nodes);
+  }
+}
